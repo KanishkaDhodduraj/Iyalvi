@@ -1,0 +1,74 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { AdminApiClient, signedInThisSessionKey } from "./api";
+
+const ok = (data: unknown, status = 200) => new Response(JSON.stringify(data), {
+  status,
+  headers: { "Content-Type": "application/json" },
+});
+
+describe("AdminApiClient", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("binds the browser fetch function to its global object", async () => {
+    const fetcher = vi.fn<typeof fetch>(function (this: typeof globalThis) {
+      expect(this).toBe(globalThis);
+      return Promise.resolve(ok({ admin: { id: "a1", email: "admin@example.com", role: "manager" } }));
+    });
+    vi.stubGlobal("fetch", fetcher);
+    const client = new AdminApiClient();
+
+    await expect(client.get("/auth/me")).resolves.toMatchObject({
+      admin: { id: "a1", role: "manager" },
+    });
+    expect(fetcher).toHaveBeenCalledOnce();
+  });
+
+  it("sends cookies and CSRF headers, then refreshes and retries an expired session once", async () => {
+    const fetcher = vi.fn< typeof fetch>()
+      .mockResolvedValueOnce(ok({ error: "Session expired" }, 401))
+      .mockResolvedValueOnce(ok({ csrfToken: "csrf value" }))
+      .mockResolvedValueOnce(ok({ admin: { id: "a1", email: "admin@example.com", role: "manager" } }))
+      .mockResolvedValueOnce(ok({ items: [{ id: "p1" }] }));
+    const client = new AdminApiClient(fetcher);
+
+    await expect(client.get<{ items: unknown[] }>("/products")).resolves.toEqual({ items: [{ id: "p1" }] });
+    expect(fetcher).toHaveBeenCalledTimes(4);
+    expect(fetcher.mock.calls[0]?.[1]).toMatchObject({ credentials: "include" });
+    expect(fetcher.mock.calls[1]?.[0]).toBe("/api/auth/csrf");
+    expect(fetcher.mock.calls[2]?.[0]).toBe("/api/auth/refresh");
+    expect(fetcher.mock.calls[2]?.[1]?.credentials).toBe("include");
+    expect(new Headers(fetcher.mock.calls[2]?.[1]?.headers).get("x-csrf-token")).toBe("csrf value");
+    expect(fetcher.mock.calls[3]?.[0]).toBe("/api/products");
+  });
+
+  it("does not store a token or retry a login request", async () => {
+    const fetcher = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(ok({ csrfToken: "csrf-token" }))
+      .mockResolvedValueOnce(ok({ error: "Invalid credentials" }, 401));
+    const client = new AdminApiClient(fetcher);
+
+    await expect(client.post("/auth/login", { email: "a@example.com", password: "bad" })).rejects.toThrow("Invalid credentials");
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(window.localStorage.length).toBe(0);
+  });
+
+  it("returns a helpful offline message when the API cannot be reached", async () => {
+    const client = new AdminApiClient(vi.fn<typeof fetch>().mockRejectedValue(new TypeError("Network error")));
+    await expect(client.get("/dashboard")).rejects.toThrow(/offline or unreachable/i);
+  });
+
+  it("clears the browser-session sign-in flag after an unauthorized response", async () => {
+    sessionStorage.setItem(signedInThisSessionKey, "true");
+    const fetcher = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(ok({ error: "Authentication required" }, 401))
+      .mockResolvedValueOnce(ok({ csrfToken: "csrf-token" }))
+      .mockResolvedValueOnce(ok({ error: "Authentication required" }, 401));
+    const client = new AdminApiClient(fetcher);
+
+    await expect(client.get("/settings/profile")).rejects.toThrow("Authentication required");
+    expect(sessionStorage.getItem(signedInThisSessionKey)).toBeNull();
+  });
+});
