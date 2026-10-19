@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "backend": {
+      "root": "backend",
+      "framework": "express",
+      "functions": {
+        "api/index.ts": {
+          "maxDuration": 30
+        }
+      }
+    },
+    "frontend": {
+      "root": "frontend",
+      "framework": "tanstack-start-lovable"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "backend" } },
+    { "source": "/uploads/(.*)", "destination": { "service": "backend" } },
+    { "source": "/(.*)", "destination": { "service": "frontend" } }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "backend": {
+      "root": "backend",
+      "framework": "express",
+      "functions": {
+        "api/index.ts": {
+          "maxDuration": 30
+        }
+      }
+    },
+    "frontend": {
+      "root": "frontend",
+      "framework": "vite",
+      "outputDirectory": "dist",
+      "rewrites": [
+        { "source": "/(.*)", "destination": "/index.html" }
+      ]
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "backend" } },
+    { "source": "/uploads/(.*)", "destination": { "service": "backend" } },
+    { "source": "/(.*)", "destination": { "service": "frontend" } }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/expire-promotions",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
