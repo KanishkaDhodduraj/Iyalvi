@@ -16,8 +16,6 @@ import { adminRouter } from "./routes/admin.js";
 import { authRouter } from "./routes/auth.js";
 import { productImageRouter } from "./routes/productImageRoutes.js";
 import { reportsRouter } from "./routes/reports.js";
-import { sweepExpiredPromotions } from "./services/promotionExpiry.js";
-import { hasValidCronAuthorization } from "./services/cronAuthorization.js";
 
 export const app = express();
 app.disable("x-powered-by");
@@ -67,15 +65,6 @@ app.get("/api/auth/csrf", emptyQuery, emptyBody, (request, response) => {
     path: "/",
   });
   response.json({ csrfToken });
-});
-app.get("/api/cron/expire-promotions", emptyQuery, emptyBody, async (request, response) => {
-  if (!hasValidCronAuthorization(request.get("authorization"), env.CRON_SECRET)) {
-    response.status(env.CRON_SECRET ? 401 : 503).json({
-      error: env.CRON_SECRET ? "Unauthorized" : "Cron is not configured",
-    });
-    return;
-  }
-  response.json(await sweepExpiredPromotions());
 });
 app.use("/api/auth/login", rateLimit({ windowMs: 15 * 60 * 1000, limit: 5, standardHeaders: true, legacyHeaders: false }));
 app.use("/api/auth", authRouter);

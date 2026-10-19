@@ -6,7 +6,6 @@ const baseEnvironment = {
   DATABASE_URL: "mongodb://localhost:27017/iyalvi-test",
   JWT_SECRET: "test-only-secret-that-is-at-least-32-characters",
   CLIENT_URL: "http://localhost:8080",
-  CRON_SECRET: "test-only-cron-secret",
 };
 
 describe("DEMO_PAYMENTS environment option", () => {

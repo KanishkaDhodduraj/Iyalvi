@@ -29,7 +29,6 @@ const schema = z.object({
     (value) => (value === "" || value === undefined ? "lax" : value),
     z.enum(["lax", "none"]),
   ),
-  CRON_SECRET: z.string({ error: "missing" }).trim().min(1),
   TRUST_PROXY: z.preprocess(
     (value) => (value === "" || value === undefined ? "0" : value),
     z.enum(["0", "1", "true", "false"]),

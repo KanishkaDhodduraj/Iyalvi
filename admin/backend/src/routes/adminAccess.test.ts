@@ -72,10 +72,9 @@ describe("admin API authentication", () => {
     expect(cookie).toMatch(/httponly/i);
   });
 
-  it("does not expose promotion expiry without a configured cron secret", async () => {
+  it("does not expose a promotion expiry cron endpoint", async () => {
     const response = await fetch(`${origin}/api/cron/expire-promotions`);
-    expect(response.status).toBe(503);
-    expect(await response.json()).toEqual({ error: "Cron is not configured" });
+    expect(response.status).toBe(404);
   });
 
   it.each(["/api/messages", "/api/messages/unread-count"])(

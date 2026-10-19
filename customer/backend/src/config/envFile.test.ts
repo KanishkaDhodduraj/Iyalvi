@@ -68,7 +68,6 @@ describe("environment validation", () => {
     DATABASE_URL: "https://database.example",
     JWT_SECRET: "01234567890123456789012345678901",
     CLIENT_URL: "https://shop.example",
-    CRON_SECRET: "test-only-cron-secret",
     NODE_ENV: "test",
     TRUST_PROXY: "false",
   };

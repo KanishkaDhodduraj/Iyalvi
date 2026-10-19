@@ -41,7 +41,6 @@ export const environmentSchema = z
       (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
       z.string({ error: "missing" }).trim().url("must be a valid URL"),
     ),
-    CRON_SECRET: z.string({ error: "missing" }).trim().min(1, "missing"),
     TRUST_PROXY: z.preprocess(
       (value) => (value === "" || value === undefined ? "0" : value),
       z.enum(["0", "1", "true", "false"]),
