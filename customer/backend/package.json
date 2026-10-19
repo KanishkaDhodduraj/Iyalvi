@@ -1,7 +1,7 @@
 {
   "name": "iyalvi-backend",
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "engines": {
     "node": ">=20"
   },

@@ -26,6 +26,7 @@ import { validateRequest } from "./middleware/validate.js";
 import { z } from "zod";
 
 export const app = express();
+export default app;
 
 app.disable("x-powered-by");
 app.set("trust proxy", env.TRUST_PROXY === "1" ? 1 : env.TRUST_PROXY === "true");

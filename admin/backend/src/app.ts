@@ -18,6 +18,7 @@ import { productImageRouter } from "./routes/productImageRoutes.js";
 import { reportsRouter } from "./routes/reports.js";
 
 export const app = express();
+export default app;
 app.disable("x-powered-by");
 app.set("trust proxy", env.TRUST_PROXY === "1" ? 1 : env.TRUST_PROXY === "true");
 app.use(helmet());
