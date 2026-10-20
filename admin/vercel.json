@@ -4,7 +4,7 @@
     "backend": {
       "root": "backend",
       "framework": "other",
-      "runtime": "nodejs22.x",
+      "runtime": "nodejs24.x",
       "entrypoint": "api/index.mjs",
       "installCommand": "npm ci --include=dev",
       "buildCommand": "npm run build",
