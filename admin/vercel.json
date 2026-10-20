@@ -3,11 +3,13 @@
   "services": {
     "backend": {
       "root": "backend",
-      "framework": "express",
+      "framework": "other",
+      "runtime": "nodejs22.x",
+      "entrypoint": "api/index.mjs",
       "installCommand": "npm ci --include=dev",
       "buildCommand": "npm run build",
       "functions": {
-        "src/app.mjs": {
+        "api/index.mjs": {
           "maxDuration": 30
         }
       }

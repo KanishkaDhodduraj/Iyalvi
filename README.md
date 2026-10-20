@@ -95,12 +95,12 @@ Create two Vercel projects connected to this repository:
 2. **Admin project:** set Root Directory to `admin`.
 
 Each directory contains a `vercel.json` with two named services (`backend` and
-`frontend`). Keep the service roots and framework settings from those files.
-Use the npm package manager. Let Vercel detect each service's install/build
-commands and output settings from its framework and package configuration; do
-not replace the configured multi-service rewrites with single-output settings.
-The Express backends export their app from `backend/src/app.mts`; do not add a
-custom `app.listen()` Vercel entrypoint.
+`frontend`). Keep the service roots, Node.js runtime, generated backend
+entrypoint, and build commands from those files. Each backend service runs
+`npm ci --include=dev` from its `backend` root, then bundles the Express app
+and its JavaScript dependencies into `backend/api/index.mjs`. The generated
+handler is ignored by Git and recreated during each deployment. Do not replace
+the multi-service rewrites with single-output settings.
 The admin SPA has a frontend-service fallback to `index.html`; API and upload
 requests are routed to the backend before the frontend catch-all.
 
@@ -142,6 +142,10 @@ the bootstrap credentials as persistent Vercel variables.
 Function settings such as `maxDuration` are declared inside each backend
 service's `functions` configuration in the same file. The promotion-expiry
 cron is not enabled because there is currently no matching backend endpoint.
+Admin image processing uses the native `sharp` package, which stays external
+to the bundle and is declared as a backend runtime dependency. It is loaded
+only when image processing is requested; production image uploads remain
+disabled until cloud storage is configured.
 
 ## Deployment limits
 

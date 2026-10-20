@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, unlink } from "node:fs/promises";
 import { resolve, sep } from "node:path";
-import sharp from "sharp";
 import { Product } from "../models/Product.js";
 
 const storageDirectory = resolve(process.cwd(), "../../uploads/products");
@@ -38,6 +37,7 @@ export class InvalidImageError extends Error {
 export class LocalDiskStorage implements ImageStorage {
   async save(buffer: Buffer, alt: string): Promise<StoredImage> {
     if (buffer.length > maxFileBytes) throw new InvalidImageError("Each image must be 5 MB or smaller");
+    const { default: sharp } = await import("sharp");
     let format: string | undefined;
     try {
       ({ format } = await sharp(buffer, { limitInputPixels: 40_000_000 }).metadata());
