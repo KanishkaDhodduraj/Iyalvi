@@ -39,7 +39,7 @@ const parsed = schema.safeParse(process.env);
 if (!parsed.success) {
   const details = parsed.error.issues.map((issue) => issue.path.join("."));
   console.error(`Invalid admin environment. Check: ${[...new Set(details)].join(", ")}`);
-  process.exit(1);
+  throw new Error(`Invalid admin environment. Check: ${[...new Set(details)].join(", ")}`);
 }
 
 export const env = parsed.data;

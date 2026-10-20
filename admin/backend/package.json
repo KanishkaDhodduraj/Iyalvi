@@ -9,7 +9,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
-    "lint": "eslint src api",
+    "lint": "eslint src",
     "test": "vitest run",
     "create-admin": "tsx src/scripts/createAdmin.ts",
     "reset-admin": "tsx src/scripts/resetAdminCommand.ts"

@@ -3,7 +3,7 @@ import "./config/loadEnv.js";
 
 async function start(): Promise<void> {
   const [{ app }, { env }] = await Promise.all([
-    import("./app.js"),
+    import("./app.mjs"),
     import("./config/env.js"),
   ]);
   app.listen(env.PORT, () => {

@@ -9,7 +9,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/src/index.js",
-    "lint": "eslint src api",
+    "lint": "eslint src",
     "test": "vitest run",
     "env:check": "tsx src/scripts/envCheck.ts",
     "clear-products": "tsx src/scripts/clearProducts.ts",

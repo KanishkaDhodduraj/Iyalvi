@@ -71,7 +71,11 @@ app.use((request, _response, next) => {
 app.use(hpp());
 app.use(csrfProtection);
 app.use("/api", async (request, response, next) => {
-  if (request.path === "/health" || env.NODE_ENV === "test") {
+  if (
+    request.path === "/health" ||
+    request.path === "/auth/csrf" ||
+    env.NODE_ENV === "test"
+  ) {
     next();
     return;
   }

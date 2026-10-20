@@ -55,12 +55,12 @@ For each backend, copy its `.env.example` to `.env` in that backend directory,
 then provide values locally. Never commit `.env` files. Both APIs require
 `DATABASE_URL` for the same MongoDB Atlas database. Set each backend's allowed
 client URL to its corresponding local frontend origin. Use a customer
-`JWT_SECRET` and admin `ADMIN_JWT_SECRET` of at least 32 characters, and set a
-private `CRON_SECRET` for the protected promotion-expiry endpoint. Set
+`JWT_SECRET` and admin `ADMIN_JWT_SECRET` of at least 32 characters. Set
 `TRUST_PROXY` to `0` locally; on Vercel set it to `1`. `COOKIE_SAME_SITE` is
 optional and defaults to `lax`. `PORT` is optional; its defaults are 5000 for
 the customer backend and 5001 for the admin backend. The customer backend also
-supports optional `DEMO_PAYMENTS`.
+supports optional `DEMO_PAYMENTS`. For local setup only, it can use
+`IYALVI_ENV_FILE` as an alternate env-file path; do not set this on Vercel.
 
 Both frontend `.env.example` files contain `VITE_API_BASE_URL`. Leave it empty
 to use same-origin `/api` and `/uploads` paths; set it only when intentionally
@@ -99,26 +99,31 @@ Each directory contains a `vercel.json` with two named services (`backend` and
 Use the npm package manager. Let Vercel detect each service's install/build
 commands and output settings from its framework and package configuration; do
 not replace the configured multi-service rewrites with single-output settings.
+The Express backends export their app from `backend/src/app.mts`; do not add a
+custom `app.listen()` Vercel entrypoint.
 The admin SPA has a frontend-service fallback to `index.html`; API and upload
 requests are routed to the backend before the frontend catch-all.
 
 Configure environment variables in each Vercel project (Production and any
 other environments you deploy):
 
-- Customer backend: `DATABASE_URL`, `JWT_SECRET`, `CLIENT_URL`,
-  `TRUST_PROXY`, `CRON_SECRET`; optionally `DEMO_PAYMENTS` and
-  `COOKIE_SAME_SITE`.
+- Customer backend: required `DATABASE_URL`, `JWT_SECRET`, `CLIENT_URL`;
+  optional `GOOGLE_CLIENT_ID`, `DEMO_PAYMENTS`, `COOKIE_SAME_SITE`, and
+  `PORT`. Set `TRUST_PROXY=1` on Vercel.
 - Customer frontend: optionally `VITE_API_BASE_URL` (leave it empty for
   same-origin).
-- Admin backend: `DATABASE_URL`, `ADMIN_JWT_SECRET`, `ADMIN_CLIENT_URL`,
-  `TRUST_PROXY`, `CRON_SECRET`; optionally `COOKIE_SAME_SITE`.
+- Admin backend: required `DATABASE_URL`, `ADMIN_JWT_SECRET`,
+  `ADMIN_CLIENT_URL`; optionally `COOKIE_SAME_SITE` and `PORT`. Set
+  `TRUST_PROXY=1` on Vercel.
 - Admin frontend: optionally `VITE_API_BASE_URL` (leave it empty for
   same-origin).
 
 Vercel sets `NODE_ENV`; it is not a required project variable. Add all secret
 values through Vercel's environment-variable UI or CLI, never to this
-repository. Both backend services must use the same Atlas database URL. Set
-`TRUST_PROXY` to `1` so rate limits use the client IP forwarded by Vercel.
+repository. Both backend services must use the same Atlas database URL.
+`COOKIE_SAME_SITE` defaults to `lax`; leave it unset when frontend and API are
+served from the same Vercel project origin. Do not configure a cookie domain
+such as `.vercel.app`.
 
 The frontend's canonical origin is not known until the first deployment:
 
@@ -134,11 +139,9 @@ machine with the production `DATABASE_URL` and one-time `ADMIN_EMAIL` and
 `ADMIN_PASSWORD` supplied securely to `npm run create-admin`. Do not configure
 the bootstrap credentials as persistent Vercel variables.
 
-The daily promotion-expiry cron is declared in `admin/vercel.json` at the
-project level and calls `/api/cron/expire-promotions` with the configured
-`CRON_SECRET` bearer token. Vercel Hobby permits a daily schedule; this project
-uses `0 2 * * *` UTC. Function settings such as `maxDuration` are declared
-inside each backend service's `functions` configuration in the same file.
+Function settings such as `maxDuration` are declared inside each backend
+service's `functions` configuration in the same file. The promotion-expiry
+cron is not enabled because there is currently no matching backend endpoint.
 
 ## Deployment limits
 

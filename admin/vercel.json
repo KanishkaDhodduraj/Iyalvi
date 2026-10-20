@@ -5,7 +5,7 @@
       "root": "backend",
       "framework": "express",
       "functions": {
-        "api/index.ts": {
+        "src/app.mts": {
           "maxDuration": 30
         }
       }
@@ -23,11 +23,5 @@
     { "source": "/api/(.*)", "destination": { "service": "backend" } },
     { "source": "/uploads/(.*)", "destination": { "service": "backend" } },
     { "source": "/(.*)", "destination": { "service": "frontend" } }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/expire-promotions",
-      "schedule": "0 2 * * *"
-    }
   ]
 }

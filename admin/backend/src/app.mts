@@ -40,7 +40,11 @@ app.use(hpp());
 
 app.use("/api", rateLimit({ windowMs: 15 * 60 * 1000, limit: 100, standardHeaders: true, legacyHeaders: false }));
 app.use("/api", async (request, response, next) => {
-  if (request.path === "/health" || env.NODE_ENV === "test") {
+  if (
+    request.path === "/health" ||
+    request.path === "/auth/csrf" ||
+    env.NODE_ENV === "test"
+  ) {
     next();
     return;
   }

@@ -5,7 +5,7 @@
       "root": "backend",
       "framework": "express",
       "functions": {
-        "api/index.ts": {
+        "src/app.mts": {
           "maxDuration": 30
         }
       }
