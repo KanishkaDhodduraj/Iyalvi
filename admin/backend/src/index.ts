@@ -1,4 +1,4 @@
-import { app } from "./app.mjs";
+import { app } from "./application.mjs";
 import { env } from "./config/env.js";
 
 async function start(): Promise<void> {

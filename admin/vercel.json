@@ -4,8 +4,10 @@
     "backend": {
       "root": "backend",
       "framework": "express",
+      "installCommand": "npm ci --include=dev",
+      "buildCommand": "npm run build",
       "functions": {
-        "src/app.mts": {
+        "src/app.mjs": {
           "maxDuration": 30
         }
       }

@@ -29,7 +29,7 @@ vi.mock("../models/AuditLog.js", () => ({
   AuditLog: { create: mockState.auditCreate },
 }));
 
-const { app } = await import("../app.mjs");
+const { app } = await import("../application.mjs");
 let server: Server;
 let origin: string;
 

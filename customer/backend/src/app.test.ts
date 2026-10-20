@@ -5,7 +5,7 @@ import request from "supertest";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { env } from "./config/env.js";
-import { app } from "./app.mjs";
+import { app } from "./application.mjs";
 import { Product } from "./models/Product.js";
 import { Discount } from "./models/Discount.js";
 import { Order } from "./models/Order.js";
