@@ -1,0 +1,1 @@
+import{useEffect,useState}from'react';export function useMediaQuery(query:string){const[value,setValue]=useState(()=>typeof window!=='undefined'&&window.matchMedia(query).matches);useEffect(()=>{const m=window.matchMedia(query),f=()=>setValue(m.matches);f();m.addEventListener('change',f);return()=>m.removeEventListener('change',f)},[query]);return value}

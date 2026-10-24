@@ -1,0 +1,4 @@
+import type{Product}from'../data/products';export type CartEntry={product:Product;qty:number};export function addToCart(items:CartEntry[],product:Product){const current=items.find(x=>x.product.slug===product.slug);return current?items.map(x=>x.product.slug===product.slug?{...x,qty:x.qty+1}:x):[...items,{product,qty:1}]}
+export function filterProducts(items:Product[],type:string,occasion:string,sort:string){const result=items.filter(p=>(type==='All'||p.type===type)&&(occasion==='All'||p.occasion===occasion));if(sort==='Price: low to high')result.sort((a,b)=>a.price-b.price);if(sort==='Price: high to low')result.sort((a,b)=>b.price-a.price);return result}
+export function isResponsiveMobile(width:number){return width<768}
+export function shouldAutoplay({hovered,touched,hidden,reducedMotion,interacted}:{hovered:boolean;touched:boolean;hidden:boolean;reducedMotion:boolean;interacted:boolean}){return !(hovered||touched||hidden||reducedMotion||interacted)}

@@ -1,0 +1,1 @@
+export const occasions=['Diwali','Wedding','Office Wear','Casuals','Reception','Pongal'].map((name,i)=>({name,image:`/images/occasions/${['diwali','wedding','office','casual','reception','pongal'][i]}.jpg`,to:`/sarees?occasion=${encodeURIComponent(name)}`}));

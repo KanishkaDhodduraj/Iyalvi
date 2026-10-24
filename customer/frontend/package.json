@@ -1,0 +1,10 @@
+{
+  "name": "iyalvi-storefront",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {"dev":"vite --host 0.0.0.0", "build":"tsc --noEmit && vite build", "preview":"vite preview --host 0.0.0.0", "lint":"tsc --noEmit", "test":"vitest run", "images":"node scripts/images.mjs"},
+  "dependencies": {"@vitejs/plugin-react":"latest", "vite":"latest", "typescript":"latest", "react":"latest", "react-dom":"latest", "react-router-dom":"latest", "framer-motion":"latest", "lucide-react":"latest", "clsx":"latest", "tailwind-merge":"latest"},
+  "devDependencies": {"tailwindcss":"latest", "@tailwindcss/vite":"latest", "vitest":"latest", "jsdom":"latest", "sharp":"latest", "@types/react":"latest", "@types/react-dom":"latest"},
+  "engines":{"node":">=20"}
+}

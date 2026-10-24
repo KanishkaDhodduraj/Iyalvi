@@ -1,0 +1,1 @@
+import{useEffect}from'react';export function useAutoplay(next:()=>void,delay:number,paused:boolean){useEffect(()=>{if(paused||document.hidden||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const id=window.setInterval(()=>{if(!document.hidden)next()},delay);return()=>clearInterval(id)},[next,delay,paused])}

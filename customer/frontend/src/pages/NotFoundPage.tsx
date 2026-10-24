@@ -1,0 +1,1 @@
+import{Link}from'react-router-dom';export function NotFoundPage(){return <main className="container section not-found"><span className="eyebrow">A little detour</span><h1>We can't find that page</h1><p>Let's find something lovely instead.</p><Link className="btn" to="/">Back to Iyalvi</Link></main>}

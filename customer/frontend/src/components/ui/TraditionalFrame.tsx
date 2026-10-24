@@ -1,0 +1,1 @@
+import type{ReactNode}from'react';export function TraditionalFrame({children,variant='arch',className=''}:{children:ReactNode;variant?:'arch'|'oval'|'temple-arch'|'scallop';className?:string}){return <div className={`frame ${variant==='oval'?'oval':variant==='scallop'?'scallop':''} ${className}`}>{children}</div>}

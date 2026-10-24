@@ -1,0 +1,1 @@
+import{Outlet,ScrollRestoration}from'react-router-dom';import{Header}from'../components/layout/Header';import{BottomNav}from'../components/layout/BottomNav';import{Footer}from'../components/layout/Footer';import{CartDrawer}from'../components/shop/CartDrawer';export function Layout(){return <><Header/><Outlet/><Footer/><BottomNav/><CartDrawer/><ScrollRestoration/></>}

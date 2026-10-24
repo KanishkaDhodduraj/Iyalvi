@@ -1,0 +1,1 @@
+export const banners=[{image:'/images/sarees/saree8.jpg',title:'Tradition, made yours',copy:'Pieces for the moments that become memories.'},{image:'/images/sarees/saree3.jpg',title:'A little more occasion',copy:'Find a drape that feels like you.'},{image:'/images/kurtis/kurti2.jpg',title:'Everyday, beautifully',copy:'Easy favourites for wherever life takes you.'}];
